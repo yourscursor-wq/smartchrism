@@ -389,11 +389,20 @@ async function callBackendUpdateProduct(id, product) {
 }
 async function createOrder(orderData) {
   // Create order in database (without payment processing)
-  return await requestJSON('create_order.php', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(orderData)
-  });
+  try {
+    return await requestJSON('create_order.php', {
+      method: 'POST',
+      headers: { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify(orderData),
+      credentials: 'include'
+    });
+  } catch (err) {
+    console.error('Create order error:', err);
+    throw err;
+  }
 }
 
 async function callBackendProcessPayment(paymentPayload) {
@@ -411,22 +420,46 @@ async function callBackendSendEmail(toOwner, order) {
 async function requestJSON(url, options = {}) {
   // Check if page is opened via file:// protocol
   if (window.location.protocol === 'file:') {
-    throw new Error('Please access this page through XAMPP/Apache. Open: http://localhost/kk/public/index.html instead of double-clicking the file.');
+    throw new Error('Please access this page through XAMPP/Apache. Open: http://localhost/kk/index.html instead of double-clicking the file.');
   }
+
+  // Set default options with credentials
+  const defaultOptions = {
+    credentials: 'include',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    }
+  };
+  
+  // Merge with provided options
+  const finalOptions = {
+    ...defaultOptions,
+    ...options,
+    headers: {
+      ...defaultOptions.headers,
+      ...(options.headers || {})
+    }
+  };
 
   let res;
   try {
-    res = await fetch(url, options);
+    res = await fetch(url, finalOptions);
   } catch (err) {
     if (err.message === 'Failed to fetch' || err.name === 'TypeError') {
       const protocol = window.location.protocol;
       const host = window.location.host;
       if (!host || host === '') {
-        throw new Error('Cannot reach the server. Please access this page through XAMPP: http://localhost/kk/public/index.html');
+        throw new Error('Cannot reach the server. Please access this page through XAMPP: http://localhost/kk/index.html');
       }
       throw new Error(`Cannot reach the server at ${window.location.origin}/${url}. Ensure XAMPP Apache is running.`);
     }
     throw err;
+  }
+
+  // Handle 405 Method Not Allowed specifically
+  if (res.status === 405) {
+    throw new Error('Method not allowed (405). The server rejected the request method. Please check the API endpoint.');
   }
 
   const text = await res.text();
