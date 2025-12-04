@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>Admin Dashboard</title>
+    <link rel='stylesheet' href='assets/css/style.css'>
+    <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
+    <script defer src='assets/js/script.js'></script>
+</head>
+<body class='dashboard'>
+    <aside class='sidebar'>
+        <h2>Admin</h2>
+        <nav>
+            <a href='admin-dashboard.html'>Dashboard</a>
+            <a href='shop.html'>Shop</a>
+            <a href='contact.html'>Contact</a>
+        </nav>
+    </aside>
+    <main>
+        <h1>Analytics Overview</h1>
+        <div class='charts'>
+            <canvas id='salesChart'></canvas>
+            <canvas id='usersChart'></canvas>
+            <canvas id='inventoryChart'></canvas>
+        </div>
+    </main>
+</body>
+</html>

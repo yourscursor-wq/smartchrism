@@ -1,0 +1,87 @@
+# Smart Chrism Shop - Git Ignore
+
+# Configuration files with sensitive data
+config.php
+*.env
+.env.local
+.env.production
+
+# Database files
+*.sql
+*.db
+*.sqlite
+*.sqlite3
+database.sql
+
+# Uploads and user-generated content
+uploads/*
+!uploads/.gitkeep
+
+# Logs
+*.log
+logs/
+error_log
+php_error_log
+*.err
+
+# Temporary files
+*.tmp
+*.temp
+*.cache
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.settings/
+
+# Node modules (if using Node.js)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Backup files
+*.bak
+*.backup
+*_backup.php
+*_old.php
+
+# Test and debug files (remove in production)
+test_*.php
+debug_*.php
+check_*.php
+
+# Setup files (remove after installation)
+setup_database.php
+setup.php
+setup_admin.php
+setup_mpesa.php
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Composer (if using)
+vendor/
+composer.lock
+
+# Build files
+dist/
+build/
+
+# Keep important documentation
+!README.md
+!DEPLOYMENT.md
+!CONTRIBUTING.md
+!GITHUB_SETUP.md

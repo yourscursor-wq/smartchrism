@@ -1,0 +1,45 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Admin Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body class="login-body">
+  <div class="login-container">
+    <h1>Admin Login</h1>
+    <form id="loginForm">
+      <input type="email" name="email" required placeholder="admin@example.com" />
+      <input type="password" name="password" required placeholder="password" />
+      <button class="btn full" type="submit">Login</button>
+    </form>
+    <p class="muted small">Back to <a href="index.html">Shop</a></p>
+  </div>
+  <div id="toast" class="toast"></div>
+
+  <script>
+    async function postJSON(url, body) {
+      const res = await fetch(url, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        credentials: 'include',
+        body: JSON.stringify(body)
+      });
+      return res.json();
+    }
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const payload = { email: fd.get('email'), password: fd.get('password') };
+      const result = await postJSON('/api/login', payload);
+      if (result.ok) {
+        window.location.href = 'dashboard.html';
+      } else {
+        const t = document.getElementById('toast'); t.textContent = result.error || 'Login failed'; t.style.display='block';
+        setTimeout(()=>t.style.display='none',2000);
+      }
+    });
+  </script>
+</body>
+</html>

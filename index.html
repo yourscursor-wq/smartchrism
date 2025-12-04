@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SMART CHRISM SHOE SHOP</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="brand">
+        <div class="logo">SC</div>
+        <div>
+          <div style="font-weight:700">Smart Chrism Shoe Shop</div>
+          <div class="muted">Comfort & style</div>
+        </div>
+      </div>
+
+      <nav>
+        <a href="https://wa.me/254705399169?text=Hello%20Smart%20Chrism%20Shop%2C%20I%20would%20like%20to%20inquire%20about%20your%20products" 
+           target="_blank" 
+           class="btn whatsapp-btn" 
+           title="Chat with us on WhatsApp">
+          💬 WhatsApp
+        </a>
+        <button id="openCartBtn" class="btn ghost">Cart (<span id="cartCount">0</span>)</button>
+        <button id="adminLoginBtn" class="btn ghost">Admin login</button>
+        <button id="adminLogoutBtn" class="btn ghost" style="display:none">Logout</button>
+      </nav>
+    </header>
+
+    <main class="grid">
+      <section>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <h2>Products</h2>
+          <div class="muted">PRODUCTS<strong>localStorage</strong></div>
+        </div>
+
+        <div class="cards" id="productGrid" aria-live="polite"></div>
+      </section>
+
+      <aside>
+        <div class="panel">
+          <h3>Cart</h3>
+          <div id="cartList"></div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:8px">
+            <div class="muted">Total:</div>
+            <div id="cartTotal" style="font-weight:800">KSH 0.00</div>
+          </div>
+
+          <hr style="margin:12px 0" />
+
+          <h4>Checkout</h4>
+          <form id="checkoutForm">
+            <input name="name" placeholder="Full name" required />
+            <input name="email" type="email" placeholder="Email" required />
+            <div>
+              <input 
+                id="phoneInput"
+                name="phone" 
+                type="tel" 
+                placeholder="M-Pesa phone number (e.g. 0712345678)" 
+                pattern="^(0|\+254|254)?7\d{8}$"
+                title="Enter a valid Kenyan phone number (e.g. 0712345678, +254712345678, or 254712345678)"
+                required 
+              />
+              <small id="phoneHint" class="muted" style="display:block;margin-top:4px;font-size:12px">
+                Enter your M-Pesa registered phone number
+              </small>
+            </div>
+            <input name="address" placeholder="Shipping address" required />
+            <fieldset style="margin-top:8px;border:1px solid #eee;padding:12px;border-radius:6px">
+              <legend style="font-size:13px;color:#666;font-weight:600">Payment method</legend>
+              <label style="font-size:13px;display:block;margin-bottom:8px">
+                <input type="radio" name="payment_method" value="mpesa" checked />
+                M-Pesa Paybill (Manual Payment)
+              </label>
+              <div style="background:linear-gradient(135deg, #f0f8ff 0%, #e6f7ff 100%);padding:12px;border-radius:6px;margin-top:8px;border:2px solid #25D366;box-shadow:0 2px 8px rgba(37,211,102,0.1)">
+                <div style="font-size:13px;color:#0f172a;font-weight:600;margin-bottom:8px;text-align:center">
+                  💳 M-Pesa Paybill Details
+                </div>
+                <div style="display:flex;justify-content:space-around;align-items:center;gap:15px;flex-wrap:wrap">
+                  <div style="text-align:center;flex:1;min-width:120px">
+                    <div style="font-size:11px;color:#666;margin-bottom:4px">Paybill Number</div>
+                    <div id="paybillNumber" style="font-size:18px;font-weight:700;font-family:monospace;color:#0f172a;background:#fff;padding:6px 12px;border-radius:4px;border:1px solid #ddd;cursor:pointer" onclick="copyToClipboard(this, 'Paybill Number')" title="Click to copy">
+                      247247
+                    </div>
+                  </div>
+                  <div style="text-align:center;flex:1;min-width:120px">
+                    <div style="font-size:11px;color:#666;margin-bottom:4px">Account Number</div>
+                    <div id="accountNumber" style="font-size:18px;font-weight:700;font-family:monospace;color:#0f172a;background:#fff;padding:6px 12px;border-radius:4px;border:1px solid #ddd;cursor:pointer" onclick="copyToClipboard(this, 'Account Number')" title="Click to copy">
+                      0705399169
+                    </div>
+                  </div>
+                </div>
+                <div style="font-size:11px;color:#666;margin-top:8px;text-align:center;font-style:italic">
+                  Click on numbers above to copy. You'll receive payment instructions after placing order.
+                </div>
+              </div>
+            </fieldset>
+            <button class="btn" type="submit" style="margin-top:8px">Place Order</button>
+            <div class="muted" style="margin-top:8px;font-size:13px">
+                            ✓ Send payment confirmation to us via WhatsApp incase of delay<br />
+              <br />
+              <strong>Visit our shop for pickup:</strong><br />
+              ✓ Location: <strong>OTC 2ND FLOOR WHOLESALE</strong><br />
+              ✓ Or contact us via WhatsApp<br />
+            </div>
+            <a href="https://wa.me/254705399169?text=Hello%20Smart%20Chrism%20Shop%2C%20I%20would%20like%20to%20place%20an%20order" 
+               target="_blank" 
+               class="btn whatsapp-btn" 
+               style="width:100%;margin-top:8px;text-align:center;text-decoration:none;display:flex;align-items:center;justify-content:center;gap:8px">
+              <span>💬</span> Chat on WhatsApp
+            </a>
+          </form>
+        </div>
+
+        <div class="admin-panel panel" id="adminPanel" style="display:none">
+          <h3>Admin — Manage Products</h3>
+          <button id="openAddProduct" class="btn" style="width:100%">Add Product</button>
+          <div style="margin-top:12px">
+            <div class="muted">
+              Click edit buttons to change details.
+            </div>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <!-- Product editor modal -->
+    <div id="editorModal" style="display:none" class="modal" role="dialog" aria-modal="true">
+      <div class="modal-card">
+        <h3 id="modalTitle">Edit product</h3>
+        <form id="productForm">
+          <input name="id" type="hidden" />
+          <input name="image" type="hidden" />
+          <label>Title<input name="title" required /></label>
+          <label>Description<textarea name="description" rows="3"></textarea></label>
+          <div class="row">
+            <label>Price<input name="price" type="number" step="0.01" required /></label>
+            <label>Stock<input name="stock" type="number" required /></label>
+          </div>
+          <label style="display:block">
+            Product image
+            <input name="imageFile" type="file" accept="image/*" style="margin-top:4px" />
+            <small class="muted" style="display:block;margin-top:4px">
+              Choose an image from your device. It will upload automatically and generate an online link.
+            </small>
+          </label>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button class="btn" type="submit">Save</button>
+            <button id="cancelEdit" type="button" class="btn ghost">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Admin login modal -->
+    <div id="adminLoginModal" class="modal" style="display:none" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width:360px">
+        <h3>Admin login</h3>
+        <form id="adminLoginForm">
+          <label>Email<input name="email" type="email" required placeholder="admin@example.com" /></label>
+          <label>Password<input name="password" type="password" required placeholder="••••••••" /></label>
+          <div style="display:flex;gap:8px;margin-top:12px">
+            <button type="submit" class="btn">Login</button>
+            <button type="button" id="closeAdminLogin" class="btn ghost">Cancel</button>
+          </div>
+          <div class="muted" style="margin-top:8px;font-size:13px">
+            Use your admin credentials to access product management.
+          </div>
+          <div id="adminLoginError" class="muted" style="color:#c00;margin-top:8px;display:none"></div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Payment Instructions Modal -->
+    <div id="paymentInstructionsModal" class="modal" style="display:none" role="dialog" aria-modal="true">
+      <div class="modal-card" style="max-width:550px;max-height:95vh;overflow-y:auto">
+        <!-- Header with Order Info -->
+        <div style="background:linear-gradient(135deg, #25D366 0%, #128C7E 100%);color:white;padding:20px;border-radius:8px 8px 0 0;margin:-20px -20px 20px -20px">
+          <h3 style="margin:0 0 10px 0;font-size:22px">✅ Order Created Successfully!</h3>
+          <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px">
+            <div>
+              <div style="font-size:12px;opacity:0.9">Order Number</div>
+              <div style="font-size:24px;font-weight:700;font-family:monospace" id="paymentOrderId">#0000</div>
+            </div>
+            <div style="text-align:right">
+              <div style="font-size:12px;opacity:0.9">Total Amount</div>
+              <div style="font-size:24px;font-weight:700" id="paymentTotalAmount">KSh 0.00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order Summary -->
+        <div style="background:#f8f9fa;border:1px solid #dee2e6;border-radius:8px;padding:15px;margin-bottom:15px">
+          <h4 style="margin:0 0 10px 0;font-size:14px;color:#495057">📦 Order Summary</h4>
+          <div id="paymentOrderItems" style="font-size:13px;color:#6c757d">
+            <!-- Order items will be populated here -->
+          </div>
+        </div>
+
+        <!-- Payment Details Card -->
+        <div style="background:#fff;border:2px solid #25D366;border-radius:12px;padding:20px;margin-bottom:15px;box-shadow:0 4px 12px rgba(37,211,102,0.1)">
+          <h4 style="margin:0 0 20px 0;color:#0f172a;font-size:18px;text-align:center">
+            💳 M-Pesa Payment Details
+          </h4>
+          
+          <!-- Payment Info Grid -->
+          <div style="display:grid;grid-template-columns:repeat(auto-fit, minmax(140px, 1fr));gap:15px;margin-bottom:20px">
+            <div style="text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;border:2px dashed #dee2e6">
+              <div style="font-size:11px;color:#6c757d;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Paybill</div>
+              <div id="paymentPaybill" style="font-size:22px;font-weight:700;font-family:monospace;color:#25D366;cursor:pointer;padding:8px;background:#fff;border-radius:4px;transition:all 0.3s" onclick="copyToClipboard(this, 'Paybill Number')" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 2px 8px rgba(37,211,102,0.3)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">247247</div>
+              <div style="font-size:10px;color:#6c757d;margin-top:4px">Click to copy</div>
+            </div>
+            
+            <div style="text-align:center;background:#f8f9fa;padding:15px;border-radius:8px;border:2px dashed #dee2e6">
+              <div style="font-size:11px;color:#6c757d;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Account</div>
+              <div id="paymentAccount" style="font-size:22px;font-weight:700;font-family:monospace;color:#25D366;cursor:pointer;padding:8px;background:#fff;border-radius:4px;transition:all 0.3s" onclick="copyToClipboard(this, 'Account Number')" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 2px 8px rgba(37,211,102,0.3)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">0705399169</div>
+              <div style="font-size:10px;color:#6c757d;margin-top:4px">Click to copy</div>
+            </div>
+            
+            <div style="text-align:center;background:#fff3cd;padding:15px;border-radius:8px;border:2px solid #ffc107">
+              <div style="font-size:11px;color:#856404;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px">Amount</div>
+              <div id="paymentAmount" style="font-size:22px;font-weight:700;font-family:monospace;color:#856404;cursor:pointer;padding:8px;background:#fff;border-radius:4px;transition:all 0.3s" onclick="copyToClipboard(this, 'Amount')" onmouseover="this.style.transform='scale(1.05)';this.style.boxShadow='0 2px 8px rgba(255,193,7,0.3)'" onmouseout="this.style.transform='scale(1)';this.style.boxShadow='none'">KSh 0.00</div>
+              <div style="font-size:10px;color:#856404;margin-top:4px">Click to copy</div>
+            </div>
+          </div>
+
+          <!-- Payment Steps -->
+          <div style="background:#f8f9fa;border-radius:8px;padding:15px;margin-top:15px">
+            <h5 style="margin:0 0 12px 0;font-size:14px;color:#495057">📱 Payment Steps:</h5>
+            <ol style="margin:0;padding-left:20px;color:#495057;line-height:2;font-size:13px">
+              <li>Open <strong>M-Pesa</strong> on your phone</li>
+              <li>Select <strong>"Pay Bill"</strong></li>
+              <li>Enter the details above (click to copy)</li>
+              <li>Enter your <strong>M-Pesa PIN</strong></li>
+              <li>Confirm and wait for SMS</li>
+            </ol>
+          </div>
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:15px">
+          <button onclick="copyAllPaymentDetails()" class="btn" style="background:#007bff;color:white;font-size:13px;padding:12px">
+            📋 Copy All Details
+          </button>
+          <button onclick="printPaymentInstructions()" class="btn" style="background:#6c757d;color:white;font-size:13px;padding:12px">
+            🖨️ Print/Save
+          </button>
+        </div>
+
+        <!-- Full Payment Message -->
+        <div id="paymentMessage" style="background:#e6f7ff;border:1px solid #91d5ff;border-radius:8px;padding:15px;margin-bottom:15px">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+            <p style="margin:0;font-size:13px;color:#0050b3;font-weight:600">📋 Complete Payment Message:</p>
+            <button onclick="copyPaymentMessage()" class="btn" style="padding:6px 12px;font-size:11px;background:#0050b3;color:white">Copy</button>
+          </div>
+          <div id="paymentFullMessage" style="background:#fff;border:1px solid #ddd;border-radius:6px;padding:12px;font-family:monospace;font-size:12px;line-height:1.8;color:#333;cursor:pointer;user-select:all;min-height:80px" onclick="this.select();document.execCommand('copy');toast('Payment message copied!')">
+            Loading...
+          </div>
+        </div>
+
+        <!-- WhatsApp Integration -->
+        <div style="background:linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);border:2px solid #28a745;border-radius:8px;padding:15px;margin-bottom:15px">
+          <p style="margin:0 0 12px 0;font-size:14px;color:#155724;font-weight:600">
+            ✅ After Payment:
+          </p>
+          <p style="margin:0 0 12px 0;font-size:13px;color:#155724">
+            Send your M-Pesa confirmation SMS to us via WhatsApp for instant order processing.
+          </p>
+          <a href="#" id="whatsappLink" target="_blank" class="btn" style="width:100%;background:#25D366;color:white;text-decoration:none;display:block;text-align:center;padding:12px;font-size:14px;font-weight:600;border-radius:6px">
+            💬 Send Payment Confirmation via WhatsApp
+          </a>
+        </div>
+
+        <!-- Order Tracking -->
+        <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:15px;margin-bottom:15px">
+          <p style="margin:0 0 8px 0;font-size:13px;color:#856404;font-weight:600">
+            🔍 Track Your Order:
+          </p>
+          <p style="margin:0;font-size:12px;color:#856404">
+            Save your order number: <strong id="trackOrderId" style="font-family:monospace;cursor:pointer" onclick="copyToClipboard(this, 'Order Number')">#0000</strong>
+          </p>
+          <button onclick="saveOrderLocally()" class="btn" style="margin-top:8px;width:100%;font-size:12px;background:#ffc107;color:#856404;padding:8px">
+            💾 Save Order Details Locally
+          </button>
+        </div>
+
+        <!-- Action Buttons -->
+        <div style="display:flex;gap:10px;margin-top:20px">
+          <button type="button" id="closePaymentModal" class="btn" style="flex:1;background:#25D366;color:white;padding:14px;font-weight:600">
+            ✓ Got it, I'll pay now
+          </button>
+          <button type="button" onclick="window.location.href='index.html'" class="btn ghost" style="flex:1;padding:14px">
+            ← Continue Shopping
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Small status toast -->
+    <div id="toast"></div>
+    
+    <!-- Floating WhatsApp Button -->
+    <a href="https://wa.me/254705399169?text=Hello%20Smart%20Chrism%20Shop%2C%20I%20need%20help" 
+       target="_blank" 
+       class="whatsapp-float" 
+       title="Chat with us on WhatsApp">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M16 0C7.164 0 0 7.164 0 16c0 2.825.744 5.48 2.044 7.78L0 32l8.5-2.044C10.72 31.256 13.28 32 16 32c8.836 0 16-7.164 16-16S24.836 0 16 0zm0 29.333c-2.36 0-4.58-.64-6.5-1.76l-.465-.28-4.82 1.16 1.16-4.7-.28-.465C4.64 22.58 4 20.36 4 18c0-6.624 5.376-12 12-12s12 5.376 12 12-5.376 12-12 12z" fill="white"/>
+        <path d="M23.5 18.5c-.3-.15-1.75-.86-2.02-.96-.27-.1-.47-.15-.67.15-.2.3-.77.96-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.27-.47-2.42-1.5-.9-.8-1.5-1.78-1.68-2.08-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.07-.15-.67-1.62-.92-2.22-.24-.58-.49-.5-.67-.51-.17-.01-.37-.01-.57-.01-.2 0-.52.07-.8.35-.28.28-1.08 1.05-1.08 2.56 0 1.51 1.1 2.97 1.25 3.17.15.2 2.15 3.28 5.22 4.6.72.3 1.28.48 1.72.62.73.22 1.4.19 1.93.12.58-.08 1.75-.72 2-1.42.25-.7.25-1.3.17-1.42-.08-.12-.3-.2-.6-.35z" fill="white"/>
+      </svg>
+    </a>
+  </div>
+
+  <script src="script.js"></script>
+  <script>
+    // Real-time phone number validation feedback
+    const phoneInput = document.getElementById('phoneInput');
+    const phoneHint = document.getElementById('phoneHint');
+    
+    if (phoneInput && phoneHint) {
+      phoneInput.addEventListener('input', function() {
+        const value = this.value.trim();
+        const digits = value.replace(/\D+/g, '');
+        
+        if (value === '') {
+          phoneHint.textContent = 'Enter your M-Pesa registered phone number';
+          phoneHint.style.color = '';
+          return;
+        }
+        
+        // Check if it matches Kenyan mobile format
+        const isValid = /^(0|\+254|254)?7\d{8}$/.test(value) || 
+                       (digits.startsWith('7') && digits.length === 9) ||
+                       (digits.startsWith('07') && digits.length === 10) ||
+                       (digits.startsWith('2547') && digits.length === 12);
+        
+        if (isValid) {
+          phoneHint.textContent = '✓ Valid Kenyan phone number';
+          phoneHint.style.color = '#28a745';
+        } else {
+          phoneHint.textContent = 'Format: 0712345678, +254712345678, or 254712345678';
+          phoneHint.style.color = '#dc3545';
+        }
+      });
+    }
+  </script>
+</body>
+</html>
